@@ -13,33 +13,28 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "avaliacao")
-public class Avaliacao {
+@Table(name = "agendamento")
+public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @OneToOne
+    @MapsId
+    private Cliente cliente;
+
     @ManyToOne
     @JoinColumn(name = "barbeariaId")
     private Barbearia barbearia;
 
-    @Column(name = "barbeiroId")
-    private Long barbeiroId;
+//    private TipoDoCorte tipoDoCorte;
 
-    @ManyToOne
-    @JoinColumn(name = "clienteId")
-    private Cliente cliente;
-
-    @Column(name = "pontuacao", nullable = false)
-    private Integer pontuacao;
-
-    @Column(name = "comentario")
-    private String comentario;
-
-    @Column(name = "dataAvaliacao")
-    private LocalDateTime dataAvaliacao;
+    @Column(name = "dataHora", nullable = false)
+    private LocalDateTime dataHora;
 
     @Enumerated(EnumType.STRING)
-    private Avaliador avaliador;
+    private Status status;
+
+//    private Pagamento pagamento;
 }

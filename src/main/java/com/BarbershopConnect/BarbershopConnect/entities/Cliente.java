@@ -31,4 +31,7 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente")
     private Set<Avaliacao> avaliacoes;
+
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private Agendamento agendamento;
 }
