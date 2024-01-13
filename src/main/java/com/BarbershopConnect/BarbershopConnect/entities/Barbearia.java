@@ -24,7 +24,7 @@ public class Barbearia {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Embedded
@@ -35,7 +35,10 @@ public class Barbearia {
 
 //    private Set<Barbeiro> barbeiros;
 
-//    private Set<TipoDoCorte> tiposDoCorte;
+    @ManyToMany
+    @JoinTable(name = "barbeariaTipoDoCorte", joinColumns = @JoinColumn(name = "barbeariaId"),
+            inverseJoinColumns = @JoinColumn(name = "TipoDoCorteId"))
+    private Set<TipoDoCorte> tiposDoCorte;
 
 //    private HorarioDeFuncionamento horariosDeFuncionamento;
 

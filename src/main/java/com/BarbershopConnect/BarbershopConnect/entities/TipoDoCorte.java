@@ -30,5 +30,8 @@ public class TipoDoCorte {
     private Double preco;
 
     @OneToMany(mappedBy = "tipoDoCorte")
-    private Set<Agendamento> agendamento;
+    private Set<Agendamento> agendamentos;
+
+    @ManyToMany(mappedBy = "tiposDoCorte")
+    private Set<Barbearia> barbearias;
 }

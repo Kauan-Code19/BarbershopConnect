@@ -23,6 +23,9 @@ public class Cliente {
     @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
     @Embedded
     private Endereco endereco;
 
