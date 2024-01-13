@@ -28,7 +28,9 @@ public class Agendamento {
     @JoinColumn(name = "barbeariaId")
     private Barbearia barbearia;
 
-//    private TipoDoCorte tipoDoCorte;
+    @ManyToOne
+    @JoinColumn(name = "tipoDoCorteId")
+    private TipoDoCorte tipoDoCorte;
 
     @Column(name = "dataHora", nullable = false)
     private LocalDateTime dataHora;
@@ -36,5 +38,6 @@ public class Agendamento {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-//    private Pagamento pagamento;
+    @OneToOne(mappedBy = "agendamento")
+    private Pagamento pagamento;
 }
