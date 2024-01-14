@@ -24,8 +24,9 @@ public class Avaliacao {
     @JoinColumn(name = "barbeariaId")
     private Barbearia barbearia;
 
-    @Column(name = "barbeiroId")
-    private Long barbeiroId;
+    @ManyToOne
+    @JoinColumn(name = "barbeiroId")
+    private Barbeiro barbeiro;
 
     @ManyToOne
     @JoinColumn(name = "clienteId")

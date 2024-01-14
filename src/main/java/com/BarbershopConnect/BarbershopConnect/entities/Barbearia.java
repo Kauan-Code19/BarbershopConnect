@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -21,7 +25,7 @@ public class Barbearia {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nome")
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @Column(name = "email", unique = true)
@@ -30,17 +34,21 @@ public class Barbearia {
     @Embedded
     private Endereco endereco;
 
-    @Column(name = "contato")
+    @Column(name = "contato", nullable = false)
     private String contato;
 
-//    private Set<Barbeiro> barbeiros;
+    @OneToMany(mappedBy = "barbearia")
+    private Set<Barbeiro> barbeiros;
 
     @ManyToMany
     @JoinTable(name = "barbeariaTipoDoCorte", joinColumns = @JoinColumn(name = "barbeariaId"),
             inverseJoinColumns = @JoinColumn(name = "TipoDoCorteId"))
     private Set<TipoDoCorte> tiposDoCorte;
 
-//    private HorarioDeFuncionamento horariosDeFuncionamento;
+    @ElementCollection
+    @CollectionTable(name = "horariosFuncionamento", joinColumns = @JoinColumn(name = "barbeariaId"))
+    @MapKeyEnumerated(EnumType.STRING)
+    private Map<DayOfWeek, List<LocalTime>> horariosDeFuncionamento;
 
     @OneToMany(mappedBy = "barbearia")
     private Set<Agendamento> agendamentos;

@@ -13,11 +13,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "tipoDoCorte")
-public class TipoDoCorte {
+@Table(name = "barbeiro")
+public class Barbeiro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "nome", nullable = false)
@@ -26,12 +25,13 @@ public class TipoDoCorte {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "preco", nullable = false)
-    private Double preco;
+    @Column(name = "contato", nullable = false)
+    private String contato;
 
-    @OneToMany(mappedBy = "tipoDoCorte")
-    private Set<Agendamento> agendamentos;
+    @OneToMany(mappedBy = "barbeiro")
+    private Set<Avaliacao> avaliacoes;
 
-    @ManyToMany(mappedBy = "tiposDoCorte")
-    private Set<Barbearia> barbearias;
+    @ManyToOne
+    @JoinColumn(name = "barbeariaId")
+    private Barbearia barbearia;
 }
