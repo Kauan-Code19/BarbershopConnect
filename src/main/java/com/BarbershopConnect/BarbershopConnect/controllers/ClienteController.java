@@ -2,6 +2,7 @@ package com.BarbershopConnect.BarbershopConnect.controllers;
 
 import com.BarbershopConnect.BarbershopConnect.dto.ClienteDTO;
 import com.BarbershopConnect.BarbershopConnect.services.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> cadastro(@RequestBody ClienteDTO clienteDTO) {
+    public ResponseEntity<ClienteDTO> cadastro(@Valid @RequestBody ClienteDTO clienteDTO) {
         clienteDTO = clienteService.cadastrar(clienteDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
