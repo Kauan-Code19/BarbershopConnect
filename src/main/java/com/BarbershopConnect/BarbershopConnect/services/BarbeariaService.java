@@ -1,6 +1,7 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.HorarioDeFuncionamentoDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,16 @@ public class BarbeariaService {
         entity = barbeariaRepository.save(entity);
 
         return new BarbeariaDTO(entity);
+    }
+
+    @Transactional
+    public HorarioDeFuncionamentoDTO definirHorarios (HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
+        Barbearia entity = barbeariaRepository.getReferenceById(horarioDeFuncionamentoDTO.getBarbeariaId());
+
+        entity.setHorariosDeFuncionamento(horarioDeFuncionamentoDTO.getHorariosDeFuncionamento());
+
+        entity = barbeariaRepository.save(entity);
+
+        return new HorarioDeFuncionamentoDTO(entity);
     }
 }

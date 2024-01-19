@@ -1,6 +1,7 @@
 package com.BarbershopConnect.BarbershopConnect.controllers;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.HorarioDeFuncionamentoDTO;
 import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,15 @@ public class BarbeariaController {
                 .buildAndExpand(barbeariaDTO.getId()).toUri();
 
         return ResponseEntity.created(uri).body(barbeariaDTO);
+    }
+
+    @PostMapping("/horario")
+    public ResponseEntity<HorarioDeFuncionamentoDTO> horarios (@Valid @RequestBody HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
+        horarioDeFuncionamentoDTO = barbeariaService.definirHorarios(horarioDeFuncionamentoDTO);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
+                .buildAndExpand(horarioDeFuncionamentoDTO.getBarbeariaId()).toUri();
+
+        return ResponseEntity.created(uri).body(horarioDeFuncionamentoDTO);
     }
 }
