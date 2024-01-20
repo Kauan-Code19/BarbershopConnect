@@ -29,4 +29,14 @@ public class BarbeariaController {
 
         return ResponseEntity.created(uri).body(barbeariaDTO);
     }
+
+    @PostMapping("/tiposDoCorte")
+    public ResponseEntity<BarbeariaDTO> definirTiposDoCorte(@Valid @RequestBody BarbeariaDTO barbeariaDTO) {
+        barbeariaDTO = barbeariaService.adicionarTiposDoCorte(barbeariaDTO);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/{id}")
+                .buildAndExpand(barbeariaDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(barbeariaDTO);
+    }
 }
