@@ -6,9 +6,7 @@ import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,21 +34,21 @@ public class Barbearia {
     private String contato;
 
     @OneToMany(mappedBy = "barbearia")
-    private Set<Barbeiro> barbeiros;
+    private Set<Barbeiro> barbeiros = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "barbeariaTipoDoCorte", joinColumns = @JoinColumn(name = "barbeariaId"),
             inverseJoinColumns = @JoinColumn(name = "TipoDoCorteId"))
-    private Set<TipoDoCorte> tiposDoCorte;
+    private Set<TipoDoCorte> tiposDoCorte = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "horariosFuncionamento", joinColumns = @JoinColumn(name = "barbeariaId"))
     @MapKeyEnumerated(EnumType.STRING)
-    private Map<DayOfWeek, List<LocalTime>> horariosDeFuncionamento;
+    private Map<DayOfWeek, List<LocalTime>> horariosDeFuncionamento = new HashMap<>();
 
     @OneToMany(mappedBy = "barbearia")
-    private Set<Agendamento> agendamentos;
+    private Set<Agendamento> agendamentos = new HashSet<>();
 
     @OneToMany(mappedBy = "barbearia")
-    private Set<Avaliacao> avaliacoes;
+    private Set<Avaliacao> avaliacoes = new HashSet<>();
 }

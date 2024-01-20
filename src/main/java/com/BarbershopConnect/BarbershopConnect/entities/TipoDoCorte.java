@@ -3,6 +3,7 @@ package com.BarbershopConnect.BarbershopConnect.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -28,8 +29,8 @@ public class TipoDoCorte {
     private Double preco;
 
     @OneToMany(mappedBy = "tipoDoCorte")
-    private Set<Agendamento> agendamentos;
+    private Set<Agendamento> agendamentos = new HashSet<>();
 
     @ManyToMany(mappedBy = "tiposDoCorte")
-    private Set<Barbearia> barbearias;
+    private Set<Barbearia> barbearias = new HashSet<>();
 }
