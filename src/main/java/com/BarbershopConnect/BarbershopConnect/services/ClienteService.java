@@ -3,6 +3,8 @@ package com.BarbershopConnect.BarbershopConnect.services;
 import com.BarbershopConnect.BarbershopConnect.dto.ClienteDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Cliente;
 import com.BarbershopConnect.BarbershopConnect.repositories.ClienteRepository;
+import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +31,23 @@ public class ClienteService {
         entity = clienteRepository.save(entity);
 
         return new ClienteDTO(entity);
+    }
+
+    @Transactional
+    public  ClienteDTO atualizar (Long id, ClienteDTO clienteDTO) {
+        try {
+            Cliente entity = clienteRepository.getReferenceById(id);
+
+            entity.setNome(clienteDTO.getNome());
+            entity.setEmail(clienteDTO.getEmail());
+            entity.setEndereco(clienteDTO.getEndereco());
+            entity.setContato(clienteDTO.getContato());
+
+            entity = clienteRepository.save(entity);
+
+            return new ClienteDTO(entity);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
     }
 }
