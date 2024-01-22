@@ -37,4 +37,11 @@ public class BarbeariaController {
 
         return ResponseEntity.created(uri).body(barbeiroDTO);
     }
+
+    @PutMapping("/barbeiro/{id}")
+    public ResponseEntity<BarbeiroDTO> atualizarBarbeiro(@PathVariable Long id, @Valid @RequestBody BarbeiroDTO barbeiroDTO) {
+        barbeiroDTO = barbeariaService.atualizarBarbeiro(id, barbeiroDTO);
+
+        return ResponseEntity.ok(barbeiroDTO);
+    }
 }
