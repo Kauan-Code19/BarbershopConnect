@@ -6,10 +6,7 @@ import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -31,13 +28,23 @@ public class BarbeariaController {
         return ResponseEntity.created(uri).body(barbeariaDTO);
     }
 
-    @PostMapping("/horario")
-    public ResponseEntity<HorarioDeFuncionamentoDTO> horarios (@Valid @RequestBody HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
-        horarioDeFuncionamentoDTO = barbeariaService.definirHorarios(horarioDeFuncionamentoDTO);
+    @PostMapping("/{id}/horario")
+    public ResponseEntity<HorarioDeFuncionamentoDTO> horarios (@PathVariable Long id, @Valid @RequestBody HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
+        horarioDeFuncionamentoDTO = barbeariaService.definirHorarios(id, horarioDeFuncionamentoDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
-                .buildAndExpand(horarioDeFuncionamentoDTO.getBarbeariaId()).toUri();
+                .buildAndExpand(id).toUri();
 
         return ResponseEntity.created(uri).body(horarioDeFuncionamentoDTO);
+    }
+
+    @PutMapping("/{id}/horario")
+    public ResponseEntity<HorarioDeFuncionamentoDTO> atualizacaoHorarios (@PathVariable Long id, @Valid @RequestBody HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
+        horarioDeFuncionamentoDTO = barbeariaService.atualizarHorarios(id, horarioDeFuncionamentoDTO);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
+                .buildAndExpand(id).toUri();
+
+        return ResponseEntity.ok(horarioDeFuncionamentoDTO);
     }
 }
