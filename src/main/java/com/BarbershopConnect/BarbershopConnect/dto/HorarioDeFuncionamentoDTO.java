@@ -1,8 +1,6 @@
 package com.BarbershopConnect.BarbershopConnect.dto;
 
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

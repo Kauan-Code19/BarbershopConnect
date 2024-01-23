@@ -5,6 +5,8 @@ import com.BarbershopConnect.BarbershopConnect.dto.HorarioDeFuncionamentoDTO;
 import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,5 +48,19 @@ public class BarbeariaController {
                 .buildAndExpand(id).toUri();
 
         return ResponseEntity.ok(horarioDeFuncionamentoDTO);
+    }
+
+    @GetMapping("/{id}/horario")
+    public ResponseEntity<HorarioDeFuncionamentoDTO> buscarHorarioDeFuncionamento (@PathVariable Long id) {
+        HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO = barbeariaService.buscarHorarioDeFuncionamento(id);
+
+        return ResponseEntity.ok().body(horarioDeFuncionamentoDTO);
+    }
+
+    @GetMapping("/horario")
+    public ResponseEntity<Page<HorarioDeFuncionamentoDTO>> listarHorarioDeFuncionamento (Pageable pageable) {
+        Page<HorarioDeFuncionamentoDTO> horarioDeFuncionamentoDTO = barbeariaService.listarHorariosDeFuncionamento(pageable);
+
+        return ResponseEntity.ok().body(horarioDeFuncionamentoDTO);
     }
 }

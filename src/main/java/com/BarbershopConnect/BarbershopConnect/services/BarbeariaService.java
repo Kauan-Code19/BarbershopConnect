@@ -7,6 +7,8 @@ import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +64,23 @@ public class BarbeariaService {
         }catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public HorarioDeFuncionamentoDTO buscarHorarioDeFuncionamento (Long id) {
+        try {
+            Barbearia barbearia = barbeariaRepository.getReferenceById(id);
+
+            return new HorarioDeFuncionamentoDTO(barbearia);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<HorarioDeFuncionamentoDTO> listarHorariosDeFuncionamento (Pageable pageable) {
+        Page<Barbearia> barbearias = barbeariaRepository.findAll(pageable);
+
+        return barbearias.map(HorarioDeFuncionamentoDTO::new);
     }
 }
