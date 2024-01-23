@@ -4,6 +4,8 @@ import com.BarbershopConnect.BarbershopConnect.dto.ClienteDTO;
 import com.BarbershopConnect.BarbershopConnect.services.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,5 +41,19 @@ public class ClienteController {
         clienteService.deletar(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> buscar (@PathVariable Long id) {
+        ClienteDTO clienteDTO = clienteService.buscar(id);
+
+        return ResponseEntity.ok().body(clienteDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ClienteDTO>> listar (Pageable pageable) {
+        Page<ClienteDTO> clienteDTOS = clienteService.listar(pageable);
+
+        return ResponseEntity.ok().body(clienteDTOS);
     }
 }
