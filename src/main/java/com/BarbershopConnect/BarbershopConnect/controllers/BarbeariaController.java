@@ -5,6 +5,8 @@ import com.BarbershopConnect.BarbershopConnect.dto.BarbeiroDTO;
 import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,5 +52,19 @@ public class BarbeariaController {
         barbeariaService.deletarBarbeiro(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/barbeiro/{id}")
+    public ResponseEntity<BarbeiroDTO> buscarBarbeiro (@PathVariable Long id) {
+        BarbeiroDTO barbeiroDTO = barbeariaService.buscarBarbeiro(id);
+
+        return ResponseEntity.ok().body(barbeiroDTO);
+    }
+
+    @GetMapping("/barbeiro")
+    public ResponseEntity<Page<BarbeiroDTO>> listarBarbeiro (Pageable pageable) {
+        Page<BarbeiroDTO> barbeiroDTOS = barbeariaService.listarBarbeiros(pageable);
+
+        return ResponseEntity.ok().body(barbeiroDTOS);
     }
 }

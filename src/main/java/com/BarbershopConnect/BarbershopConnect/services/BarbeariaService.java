@@ -11,6 +11,8 @@ import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFo
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,5 +86,23 @@ public class BarbeariaService {
         }catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public BarbeiroDTO buscarBarbeiro (Long id) {
+        try {
+            Barbeiro barbeiro = barbeiroRepository.getReferenceById(id);
+
+            return new BarbeiroDTO(barbeiro);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BarbeiroDTO> listarBarbeiros (Pageable pageable) {
+        Page<Barbeiro> barbeiros = barbeiroRepository.findAll(pageable);
+
+        return barbeiros.map(BarbeiroDTO::new);
     }
 }
