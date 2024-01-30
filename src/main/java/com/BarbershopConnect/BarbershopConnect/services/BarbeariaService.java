@@ -1,9 +1,12 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
+import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +21,21 @@ public class BarbeariaService {
     }
 
     @Transactional
-    public BarbeariaDTO cadastrar (BarbeariaDTO barbeariaDTO) {
-        Barbearia entity = new Barbearia();
+    public BarbeariaResponseDTO cadastrar (BarbeariaDTO barbeariaDTO) {
+        try {
+            Barbearia entity = new Barbearia();
 
-        entity.setNome(barbeariaDTO.getNome());
-        entity.setEmail(barbeariaDTO.getEmail());
-        entity.setEndereco(barbeariaDTO.getEndereco());
-        entity.setContato(barbeariaDTO.getContato());
+            entity.setNome(barbeariaDTO.getNome());
+            entity.setEmail(barbeariaDTO.getEmail());
+            entity.setSenha(barbeariaDTO.getSenha());
+            entity.setEndereco(barbeariaDTO.getEndereco());
+            entity.setContato(barbeariaDTO.getContato());
 
-        entity = barbeariaRepository.save(entity);
+            entity = barbeariaRepository.save(entity);
 
-        return new BarbeariaDTO(entity);
+            return new BarbeariaResponseDTO(entity);
+        }catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
     }
 }
