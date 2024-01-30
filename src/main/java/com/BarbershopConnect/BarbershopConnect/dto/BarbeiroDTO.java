@@ -22,13 +22,13 @@ public class BarbeiroDTO {
     @Pattern(regexp = "^\\(?(\\d{2})\\)?[-.\\s]?\\d{4,5}[-.\\s]?\\d{4}$", message = "Formato de número de telefone inválido.")
     private String contato;
 
-    private BarbeariaDTO barbearia;
+    private BarbeariaResponseDTO barbearia;
 
     public BarbeiroDTO(Barbeiro entity) {
         id = entity.getId();
         nome = entity.getNome();
         descricao = entity.getDescricao();
         contato = entity.getContato();
-        barbearia = new BarbeariaDTO(entity.getBarbearia());
+        barbearia = new BarbeariaResponseDTO(entity.getBarbearia());
     }
 }
