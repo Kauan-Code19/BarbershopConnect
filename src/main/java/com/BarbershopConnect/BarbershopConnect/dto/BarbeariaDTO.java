@@ -23,6 +23,11 @@ public class BarbeariaDTO {
     @Email
     private String email;
 
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).*$",
+            message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.")
+    private String senha;
+
     @Valid
     @Embedded
     private Endereco endereco;
