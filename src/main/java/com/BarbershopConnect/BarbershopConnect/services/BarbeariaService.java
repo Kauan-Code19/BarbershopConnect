@@ -1,6 +1,7 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
@@ -25,32 +26,38 @@ public class BarbeariaService {
     }
 
     @Transactional
-    public BarbeariaDTO cadastrar (BarbeariaDTO barbeariaDTO) {
-        Barbearia entity = new Barbearia();
-
-        entity.setNome(barbeariaDTO.getNome());
-        entity.setEmail(barbeariaDTO.getEmail());
-        entity.setEndereco(barbeariaDTO.getEndereco());
-        entity.setContato(barbeariaDTO.getContato());
-
-        entity = barbeariaRepository.save(entity);
-
-        return new BarbeariaDTO(entity);
-    }
-
-    @Transactional
-    public BarbeariaDTO atualizar (Long id, BarbeariaDTO barbeariaDTO) {
+    public BarbeariaResponseDTO cadastrar (BarbeariaDTO barbeariaDTO) {
         try {
-            Barbearia entity = barbeariaRepository.getReferenceById(id);
+            Barbearia entity = new Barbearia();
 
             entity.setNome(barbeariaDTO.getNome());
             entity.setEmail(barbeariaDTO.getEmail());
+            entity.setSenha(barbeariaDTO.getSenha());
             entity.setEndereco(barbeariaDTO.getEndereco());
             entity.setContato(barbeariaDTO.getContato());
 
             entity = barbeariaRepository.save(entity);
 
-            return new BarbeariaDTO(entity);
+            return new BarbeariaResponseDTO(entity);
+        }catch (DataIntegrityViolationException e) {
+                throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+
+    @Transactional
+    public BarbeariaResponseDTO atualizar (Long id, BarbeariaDTO barbeariaDTO) {
+        try {
+            Barbearia entity = barbeariaRepository.getReferenceById(id);
+
+            entity.setNome(barbeariaDTO.getNome());
+            entity.setEmail(barbeariaDTO.getEmail());
+            entity.setSenha(barbeariaDTO.getSenha());
+            entity.setEndereco(barbeariaDTO.getEndereco());
+            entity.setContato(barbeariaDTO.getContato());
+
+            entity = barbeariaRepository.save(entity);
+
+            return new BarbeariaResponseDTO(entity);
         }catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não Encontrado");
         }
@@ -70,20 +77,20 @@ public class BarbeariaService {
     }
 
     @Transactional(readOnly = true)
-    public BarbeariaDTO buscar (Long id) {
+    public BarbeariaResponseDTO buscar (Long id) {
         try {
             Barbearia barbearia = barbeariaRepository.getReferenceById(id);
 
-            return new BarbeariaDTO(barbearia);
+            return new BarbeariaResponseDTO(barbearia);
         }catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
 
     @Transactional(readOnly = true)
-    public Page<BarbeariaDTO> listar (Pageable pageable) {
+    public Page<BarbeariaResponseDTO> listar (Pageable pageable) {
         Page<Barbearia> barbearia = barbeariaRepository.findAll(pageable);
 
-        return barbearia.map(BarbeariaDTO::new);
+        return barbearia.map(BarbeariaResponseDTO::new);
     }
 }
