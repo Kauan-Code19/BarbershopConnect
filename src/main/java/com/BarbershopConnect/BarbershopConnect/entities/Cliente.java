@@ -25,6 +25,9 @@ public class Cliente {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "senha", nullable = false)
+    private String senha;
+
     @Embedded
     private Endereco endereco;
 
