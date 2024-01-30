@@ -29,65 +29,6 @@ public class BarbeariaService {
         this.barbeiroRepository = barbeiroRepository;
     }
 
-    @Transactional
-    public BarbeariaDTO cadastrar (BarbeariaDTO barbeariaDTO) {
-        Barbearia entity = new Barbearia();
-
-        entity.setNome(barbeariaDTO.getNome());
-        entity.setEmail(barbeariaDTO.getEmail());
-        entity.setEndereco(barbeariaDTO.getEndereco());
-        entity.setContato(barbeariaDTO.getContato());
-
-        entity = barbeariaRepository.save(entity);
-
-        return new BarbeariaDTO(entity);
-    }
-
-    @Transactional
-    public BarbeiroDTO cadastrarBarbeiro (BarbeiroDTO barbeiroDTO) {
-        Barbeiro entity = new Barbeiro();
-        Barbearia barbearia = barbeariaRepository.getReferenceById(barbeiroDTO.getBarbearia().getId());
-
-        entity.setNome(barbeiroDTO.getNome());
-        entity.setDescricao(barbeiroDTO.getDescricao());
-        entity.setContato(barbeiroDTO.getContato());
-        entity.setBarbearia(barbearia);
-
-        entity = barbeiroRepository.save(entity);
-
-        return  new BarbeiroDTO(entity);
-    }
-
-    @Transactional
-    public BarbeiroDTO atualizarBarbeiro (Long id, BarbeiroDTO barbeiroDTO) {
-        try {
-            Barbeiro entity = barbeiroRepository.getReferenceById(id);
-            Barbearia barbearia = barbeariaRepository.getReferenceById(barbeiroDTO.getBarbearia().getId());
-
-            entity.setNome(barbeiroDTO.getNome());
-            entity.setDescricao(barbeiroDTO.getDescricao());
-            entity.setContato(barbeiroDTO.getContato());
-            entity.setBarbearia(barbearia);
-
-            entity = barbeiroRepository.save(entity);
-
-            return new BarbeiroDTO(entity);
-        }catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado");
-        }
-    }
-
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void deletarBarbeiro (Long id) {
-        if (!barbeiroRepository.existsById(id))
-            throw new ResourceNotFoundException("Recurso não encontrado");
-        try {
-            barbeiroRepository.deleteById(id);
-        }catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Falha de integridade referencial");
-        }
-    }
-
     @Transactional(readOnly = true)
     public BarbeiroDTO buscarBarbeiro (Long id) {
         try {
