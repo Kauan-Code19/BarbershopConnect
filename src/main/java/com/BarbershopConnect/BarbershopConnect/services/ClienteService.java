@@ -1,6 +1,7 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
 import com.BarbershopConnect.BarbershopConnect.dto.ClienteDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.ClienteResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Cliente;
 import com.BarbershopConnect.BarbershopConnect.repositories.ClienteRepository;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
@@ -23,32 +24,38 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteDTO cadastrar(ClienteDTO clienteDTO) {
-        Cliente entity = new Cliente();
-
-        entity.setNome(clienteDTO.getNome());
-        entity.setEmail(clienteDTO.getEmail());
-        entity.setEndereco(clienteDTO.getEndereco());
-        entity.setContato(clienteDTO.getContato());
-
-        entity = clienteRepository.save(entity);
-
-        return new ClienteDTO(entity);
-    }
-
-    @Transactional
-    public  ClienteDTO atualizar (Long id, ClienteDTO clienteDTO) {
+    public ClienteResponseDTO cadastrar(ClienteDTO clienteDTO) {
         try {
-            Cliente entity = clienteRepository.getReferenceById(id);
+            Cliente entity = new Cliente();
 
             entity.setNome(clienteDTO.getNome());
             entity.setEmail(clienteDTO.getEmail());
+            entity.setSenha(clienteDTO.getSenha());
             entity.setEndereco(clienteDTO.getEndereco());
             entity.setContato(clienteDTO.getContato());
 
             entity = clienteRepository.save(entity);
 
-            return new ClienteDTO(entity);
+            return new ClienteResponseDTO(entity);
+        }catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+
+    @Transactional
+    public  ClienteResponseDTO atualizar (Long id, ClienteDTO clienteDTO) {
+        try {
+            Cliente entity = clienteRepository.getReferenceById(id);
+
+            entity.setNome(clienteDTO.getNome());
+            entity.setEmail(clienteDTO.getEmail());
+            entity.setSenha(clienteDTO.getSenha());
+            entity.setEndereco(clienteDTO.getEndereco());
+            entity.setContato(clienteDTO.getContato());
+
+            entity = clienteRepository.save(entity);
+
+            return new ClienteResponseDTO(entity);
         }catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
