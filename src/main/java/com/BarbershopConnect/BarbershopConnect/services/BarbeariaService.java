@@ -22,19 +22,6 @@ public class BarbeariaService {
         this.barbeariaRepository = barbeariaRepository;
     }
 
-    @Transactional
-    public BarbeariaDTO cadastrar (BarbeariaDTO barbeariaDTO) {
-        Barbearia entity = new Barbearia();
-
-        entity.setNome(barbeariaDTO.getNome());
-        entity.setEmail(barbeariaDTO.getEmail());
-        entity.setEndereco(barbeariaDTO.getEndereco());
-        entity.setContato(barbeariaDTO.getContato());
-
-        entity = barbeariaRepository.save(entity);
-
-        return new BarbeariaDTO(entity);
-    }
 
     @Transactional
     public HorarioDeFuncionamentoDTO definirHorarios (Long id, HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
