@@ -1,11 +1,11 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
-import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeiroDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbeiro;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeiroRepository;
+import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +23,13 @@ public class BarbeariaService {
     }
 
     @Transactional
-    public BarbeiroDTO cadastrarBarbeiro (BarbeiroDTO barbeiroDTO) {
+    public BarbeiroDTO cadastrarBarbeiro (Long id, BarbeiroDTO barbeiroDTO) {
+        if (!barbeariaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+
         Barbeiro entity = new Barbeiro();
-        Barbearia barbearia = barbeariaRepository.getReferenceById(barbeiroDTO.getBarbearia().getId());
+        Barbearia barbearia = barbeariaRepository.getReferenceById(id);
 
         entity.setNome(barbeiroDTO.getNome());
         entity.setDescricao(barbeiroDTO.getDescricao());

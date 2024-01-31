@@ -18,9 +18,9 @@ public class BarbeariaController {
     @Autowired
     private BarbeariaService barbeariaService;
 
-    @PostMapping("/barbeiro")
-    public ResponseEntity<BarbeiroDTO> cadastroBarbeiro(@Valid @RequestBody BarbeiroDTO barbeiroDTO) {
-        barbeiroDTO = barbeariaService.cadastrarBarbeiro(barbeiroDTO);
+    @PostMapping("/{id}/barbeiro")
+    public ResponseEntity<BarbeiroDTO> cadastroBarbeiro(@PathVariable Long id, @Valid @RequestBody BarbeiroDTO barbeiroDTO) {
+        barbeiroDTO = barbeariaService.cadastrarBarbeiro(id, barbeiroDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
                 .buildAndExpand(barbeiroDTO.getId()).toUri();
