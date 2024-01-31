@@ -19,9 +19,9 @@ public class BarbeariaController {
     private BarbeariaService barbeariaService;
 
 
-    @DeleteMapping("/barbeiro/{id}")
-    public ResponseEntity<Void> exclusaoBarbeiro(@PathVariable Long id) {
-        barbeariaService.deletarBarbeiro(id);
+    @DeleteMapping("/{idBarbearia}/barbeiro/{idBarbeiro}")
+    public ResponseEntity<Void> exclusaoBarbeiro(@PathVariable Long idBarbeiro) {
+        barbeariaService.deletarBarbeiro(idBarbeiro);
 
         return ResponseEntity.noContent().build();
     }
