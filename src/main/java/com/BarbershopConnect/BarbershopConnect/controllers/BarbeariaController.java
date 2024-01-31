@@ -22,15 +22,6 @@ public class BarbeariaController {
     @Autowired
     private BarbeariaService barbeariaService;
 
-    @PostMapping
-    public ResponseEntity<BarbeariaDTO> cadastro(@Valid @RequestBody BarbeariaDTO barbeariaDTO) {
-        barbeariaDTO = barbeariaService.cadastrar(barbeariaDTO);
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/{id}")
-                .buildAndExpand(barbeariaDTO.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(barbeariaDTO);
-    }
 
     @PostMapping("/{id}/tiposDoCorte")
     public ResponseEntity<Set<TipoDoCorteDTO>> definirTiposDoCorte(@PathVariable Long id, @Valid @RequestBody Set<TipoDoCorteDTO> tipoDoCorteDTOS) {

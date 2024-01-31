@@ -33,19 +33,6 @@ public class BarbeariaService {
         this.tipoDoCorteRepository = tipoDoCorteRepository;
     }
 
-    @Transactional
-    public BarbeariaDTO cadastrar (BarbeariaDTO barbeariaDTO) {
-        Barbearia entity = new Barbearia();
-
-        entity.setNome(barbeariaDTO.getNome());
-        entity.setEmail(barbeariaDTO.getEmail());
-        entity.setEndereco(barbeariaDTO.getEndereco());
-        entity.setContato(barbeariaDTO.getContato());
-
-        entity = barbeariaRepository.save(entity);
-
-        return new BarbeariaDTO(entity);
-    }
 
     @Transactional
     public Set<TipoDoCorteDTO> adicionarTiposDoCorte (Long id, Set<TipoDoCorteDTO> tipoDoCorteDTOS) {
