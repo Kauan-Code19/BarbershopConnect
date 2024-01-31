@@ -21,16 +21,16 @@ public class BarbeariaController {
     private BarbeariaService barbeariaService;
 
 
-    @GetMapping("/barbeiro/{id}")
-    public ResponseEntity<BarbeiroDTO> buscarBarbeiro (@PathVariable Long id) {
-        BarbeiroDTO barbeiroDTO = barbeariaService.buscarBarbeiro(id);
+    @GetMapping("/{idBarbearia}/barbeiro/{idBarbeiro}")
+    public ResponseEntity<BarbeiroDTO> buscarBarbeiro (@PathVariable Long idBarbearia, @PathVariable Long idBarbeiro) {
+        BarbeiroDTO barbeiroDTO = barbeariaService.buscarBarbeiro(idBarbearia, idBarbeiro);
 
         return ResponseEntity.ok().body(barbeiroDTO);
     }
 
-    @GetMapping("/barbeiro")
-    public ResponseEntity<Page<BarbeiroDTO>> listarBarbeiro (Pageable pageable) {
-        Page<BarbeiroDTO> barbeiroDTOS = barbeariaService.listarBarbeiros(pageable);
+    @GetMapping("/{id}/barbeiro")
+    public ResponseEntity<Page<BarbeiroDTO>> listarBarbeiro (@PathVariable Long id, Pageable pageable) {
+        Page<BarbeiroDTO> barbeiroDTOS = barbeariaService.listarBarbeiros(id, pageable);
 
         return ResponseEntity.ok().body(barbeiroDTOS);
     }

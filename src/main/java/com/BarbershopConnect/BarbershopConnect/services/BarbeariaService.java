@@ -12,10 +12,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BarbeariaService {
@@ -30,9 +34,13 @@ public class BarbeariaService {
     }
 
     @Transactional(readOnly = true)
-    public BarbeiroDTO buscarBarbeiro (Long id) {
+    public BarbeiroDTO buscarBarbeiro (Long idBarbearia, Long idBarbeiro) {
         try {
-            Barbeiro barbeiro = barbeiroRepository.getReferenceById(id);
+            Barbeiro barbeiro = barbeiroRepository.getReferenceById(idBarbeiro);
+
+            if (!barbeiro.getBarbearia().getId().equals(idBarbearia)) {
+                throw new ResourceNotFoundException("O barbeiro não pertence a essa barbearia");
+            }
 
             return new BarbeiroDTO(barbeiro);
         }catch (EntityNotFoundException e) {
@@ -41,9 +49,13 @@ public class BarbeariaService {
     }
 
     @Transactional(readOnly = true)
-    public Page<BarbeiroDTO> listarBarbeiros (Pageable pageable) {
-        Page<Barbeiro> barbeiros = barbeiroRepository.findAll(pageable);
+    public Page<BarbeiroDTO> listarBarbeiros (Long id, Pageable pageable) {
+        try {
+            Page<Barbeiro> barbeiros = barbeiroRepository.findByBarbeariaId(id, pageable);
 
-        return barbeiros.map(BarbeiroDTO::new);
+            return barbeiros.map(BarbeiroDTO::new);
+        }catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
     }
 }
