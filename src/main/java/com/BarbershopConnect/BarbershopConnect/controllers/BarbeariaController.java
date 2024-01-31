@@ -44,11 +44,4 @@ public class BarbeariaController {
 
         return ResponseEntity.ok().body(horarioDeFuncionamentoDTO);
     }
-
-    @GetMapping("/horario")
-    public ResponseEntity<Page<HorarioDeFuncionamentoDTO>> listarHorarioDeFuncionamento (Pageable pageable) {
-        Page<HorarioDeFuncionamentoDTO> horarioDeFuncionamentoDTO = barbeariaService.listarHorariosDeFuncionamento(pageable);
-
-        return ResponseEntity.ok().body(horarioDeFuncionamentoDTO);
-    }
 }
