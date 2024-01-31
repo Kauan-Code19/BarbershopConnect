@@ -1,8 +1,6 @@
 package com.BarbershopConnect.BarbershopConnect.controllers;
 
-import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
 import com.BarbershopConnect.BarbershopConnect.dto.TipoDoCorteDTO;
-import com.BarbershopConnect.BarbershopConnect.dto.TipoDoCorteIdDTO;
 import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ public class BarbeariaController {
     private BarbeariaService barbeariaService;
 
 
-    @PostMapping("/{id}/tiposDoCorte")
+    @PostMapping("/{id}/tipos-de-corte")
     public ResponseEntity<Set<TipoDoCorteDTO>> definirTiposDoCorte(@PathVariable Long id, @Valid @RequestBody Set<TipoDoCorteDTO> tipoDoCorteDTOS) {
          Set<TipoDoCorteDTO> tipoDoCorteDTO = barbeariaService.adicionarTiposDoCorte(id, tipoDoCorteDTOS);
 
@@ -33,30 +31,23 @@ public class BarbeariaController {
         return ResponseEntity.created(uri).body(tipoDoCorteDTO);
     }
 
-    @PutMapping("/{id}/tiposDoCorte")
+    @PutMapping("/{id}/tipos-de-corte")
     public ResponseEntity<Set<TipoDoCorteDTO>> atualizarTiposDoCorte(@Valid @RequestBody Set<TipoDoCorteDTO> tipoDoCorteDTOS) {
         Set<TipoDoCorteDTO> tipoDoCorteDTO = barbeariaService.atualizarTiposDoCorte(tipoDoCorteDTOS);
 
         return ResponseEntity.ok().body(tipoDoCorteDTO);
     }
 
-    @GetMapping("/{id}/tiposDoCorte")
-    public ResponseEntity<Set<TipoDoCorteDTO>> buscarTiposDoCorte (@PathVariable Long id) {
-        Set<TipoDoCorteDTO> tipoDoCorteDTO = barbeariaService.buscarTiposDoCorte(id);
+    @GetMapping("/{id}/tipos-de-corte")
+    public ResponseEntity<Page<TipoDoCorteDTO>> buscarTiposDoCorte (@PathVariable Long id, Pageable pageable) {
+        Page<TipoDoCorteDTO> tipoDoCorteDTO = barbeariaService.buscarTiposDoCorte(id, pageable);
 
         return ResponseEntity.ok().body(tipoDoCorteDTO);
     }
 
-    @GetMapping("/tiposDoCorte")
-    public ResponseEntity<Page<TipoDoCorteDTO>> listarTiposDoCorte (Pageable pageable) {
-        Page<TipoDoCorteDTO> tipoDoCorteDTO = barbeariaService.listarTiposDoCorte(pageable);
-
-        return ResponseEntity.ok().body(tipoDoCorteDTO);
-    }
-
-    @DeleteMapping("/{id}/tiposDoCorte")
-    public ResponseEntity<Void> exclusao (@PathVariable Long id, @RequestBody TipoDoCorteIdDTO tipoDoCorteIdDTO) {
-        barbeariaService.excluir(id, tipoDoCorteIdDTO);
+    @DeleteMapping("/{idBarbearia}/tipos-de-corte/{idTipoDoCorte}")
+    public ResponseEntity<Void> exclusao (@PathVariable Long idBarbearia, @PathVariable Long idTipoDoCorte) {
+        barbeariaService.excluir(idBarbearia, idTipoDoCorte);
 
         return ResponseEntity.noContent().build();
     }
