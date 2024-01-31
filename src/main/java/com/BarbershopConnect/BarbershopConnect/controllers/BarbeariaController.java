@@ -19,9 +19,9 @@ public class BarbeariaController {
     private BarbeariaService barbeariaService;
 
 
-    @PutMapping("/barbeiro/{id}")
-    public ResponseEntity<BarbeiroDTO> atualizarBarbeiro(@PathVariable Long id, @Valid @RequestBody BarbeiroDTO barbeiroDTO) {
-        barbeiroDTO = barbeariaService.atualizarBarbeiro(id, barbeiroDTO);
+    @PutMapping("/{idBarbearia}/barbeiro/{idBarbeiro}")
+    public ResponseEntity<BarbeiroDTO> atualizarBarbeiro(@PathVariable Long idBarbearia, @Valid @RequestBody BarbeiroDTO barbeiroDTO, @PathVariable Long idBarbeiro) {
+        barbeiroDTO = barbeariaService.atualizarBarbeiro(idBarbearia, barbeiroDTO, idBarbeiro);
 
         return ResponseEntity.ok(barbeiroDTO);
     }

@@ -24,10 +24,10 @@ public class BarbeariaService {
         this.barbeiroRepository = barbeiroRepository;
     }
     @Transactional
-    public BarbeiroDTO atualizarBarbeiro (Long id, BarbeiroDTO barbeiroDTO) {
+    public BarbeiroDTO atualizarBarbeiro (Long idBarbearia, BarbeiroDTO barbeiroDTO, Long idBarbeiro) {
         try {
-            Barbeiro entity = barbeiroRepository.getReferenceById(id);
-            Barbearia barbearia = barbeariaRepository.getReferenceById(barbeiroDTO.getBarbearia().getId());
+            Barbeiro entity = barbeiroRepository.getReferenceById(idBarbeiro);
+            Barbearia barbearia = barbeariaRepository.getReferenceById(idBarbearia);
 
             entity.setNome(barbeiroDTO.getNome());
             entity.setDescricao(barbeiroDTO.getDescricao());
