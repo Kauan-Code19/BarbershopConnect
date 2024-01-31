@@ -35,9 +35,6 @@ public class BarbeariaController {
     public ResponseEntity<HorarioDeFuncionamentoDTO> atualizacaoHorarios (@PathVariable Long id, @Valid @RequestBody HorarioDeFuncionamentoDTO horarioDeFuncionamentoDTO) {
         horarioDeFuncionamentoDTO = barbeariaService.atualizarHorarios(id, horarioDeFuncionamentoDTO);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
-                .buildAndExpand(id).toUri();
-
         return ResponseEntity.ok(horarioDeFuncionamentoDTO);
     }
 
