@@ -34,4 +34,11 @@ public class BarbeariaController {
 
         return ResponseEntity.ok(barbeariaResponseDTO);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> exclusao (@PathVariable Long id) {
+        barbeariaService.deletar(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
