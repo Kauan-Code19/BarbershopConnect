@@ -41,6 +41,7 @@ public class ClienteService {
             throw new DatabaseException("Falha de integridade referencial");
         }
     }
+  
 
     @Transactional
     public  ClienteResponseDTO atualizar (Long id, ClienteDTO clienteDTO) {
