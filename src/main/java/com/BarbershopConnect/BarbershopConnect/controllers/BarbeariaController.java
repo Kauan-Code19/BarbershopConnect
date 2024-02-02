@@ -1,10 +1,12 @@
 package com.BarbershopConnect.BarbershopConnect.controllers;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
-import com.BarbershopConnect.BarbershopConnect.dto.BarbeiroDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.services.BarbeariaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,11 +20,41 @@ public class BarbeariaController {
     @Autowired
     private BarbeariaService barbeariaService;
 
+    @PostMapping
+    public ResponseEntity<BarbeariaResponseDTO> cadastro(@Valid @RequestBody BarbeariaDTO barbeariaDTO) {
+        BarbeariaResponseDTO barbeariaResponseDTO = barbeariaService.cadastrar(barbeariaDTO);
 
-    @DeleteMapping("/{idBarbearia}/barbeiro/{idBarbeiro}")
-    public ResponseEntity<Void> exclusaoBarbeiro(@PathVariable Long idBarbeiro) {
-        barbeariaService.deletarBarbeiro(idBarbeiro);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{/{id}")
+                .buildAndExpand(barbeariaResponseDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(barbeariaResponseDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BarbeariaResponseDTO> atualizacao (@PathVariable Long id, @Valid @RequestBody BarbeariaDTO barbeariaDTO) {
+        BarbeariaResponseDTO barbeariaResponseDTO =  barbeariaService.atualizar(id, barbeariaDTO);
+
+        return ResponseEntity.ok(barbeariaResponseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> exclusao (@PathVariable Long id) {
+        barbeariaService.deletar(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BarbeariaResponseDTO> buscar (@PathVariable Long id) {
+        BarbeariaResponseDTO barbeariaResponseDTO = barbeariaService.buscar(id);
+
+        return ResponseEntity.ok().body(barbeariaResponseDTO);
+    }
+
+    @GetMapping
+    public  ResponseEntity<Page<BarbeariaResponseDTO>> listar (Pageable pageable) {
+        Page<BarbeariaResponseDTO> barbeariaResponseDTOS = barbeariaService.listar(pageable);
+
+        return ResponseEntity.ok().body(barbeariaResponseDTOS);
     }
 }

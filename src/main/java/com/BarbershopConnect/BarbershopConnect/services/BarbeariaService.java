@@ -1,16 +1,16 @@
 package com.BarbershopConnect.BarbershopConnect.services;
 
 import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaDTO;
-import com.BarbershopConnect.BarbershopConnect.dto.BarbeiroDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.BarbeariaResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
-import com.BarbershopConnect.BarbershopConnect.entities.Barbeiro;
 import com.BarbershopConnect.BarbershopConnect.repositories.BarbeariaRepository;
-import com.BarbershopConnect.BarbershopConnect.repositories.BarbeiroRepository;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,22 +19,78 @@ import org.springframework.transaction.annotation.Transactional;
 public class BarbeariaService {
 
     private final BarbeariaRepository barbeariaRepository;
-    private final BarbeiroRepository barbeiroRepository;
 
     @Autowired
-    public BarbeariaService(BarbeariaRepository barbeariaRepository, BarbeiroRepository barbeiroRepository) {
+    public BarbeariaService(BarbeariaRepository barbeariaRepository) {
         this.barbeariaRepository = barbeariaRepository;
-        this.barbeiroRepository = barbeiroRepository;
+    }
+
+    @Transactional
+    public BarbeariaResponseDTO cadastrar (BarbeariaDTO barbeariaDTO) {
+        try {
+            Barbearia entity = new Barbearia();
+
+            entity.setNome(barbeariaDTO.getNome());
+            entity.setEmail(barbeariaDTO.getEmail());
+            entity.setSenha(barbeariaDTO.getSenha());
+            entity.setEndereco(barbeariaDTO.getEndereco());
+            entity.setContato(barbeariaDTO.getContato());
+
+            entity = barbeariaRepository.save(entity);
+
+            return new BarbeariaResponseDTO(entity);
+        }catch (DataIntegrityViolationException e) {
+                throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+
+    @Transactional
+    public BarbeariaResponseDTO atualizar (Long id, BarbeariaDTO barbeariaDTO) {
+        try {
+            Barbearia entity = barbeariaRepository.getReferenceById(id);
+
+            entity.setNome(barbeariaDTO.getNome());
+            entity.setEmail(barbeariaDTO.getEmail());
+            entity.setSenha(barbeariaDTO.getSenha());
+            entity.setEndereco(barbeariaDTO.getEndereco());
+            entity.setContato(barbeariaDTO.getContato());
+
+            entity = barbeariaRepository.save(entity);
+
+            return new BarbeariaResponseDTO(entity);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não Encontrado");
+        }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void deletarBarbeiro (Long id) {
-        if (!barbeiroRepository.existsById(id))
+    public void deletar (Long id) {
+        if (!barbeariaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+
         try {
-            barbeiroRepository.deleteById(id);
+            barbeariaRepository.deleteById(id);
         }catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public BarbeariaResponseDTO buscar (Long id) {
+        try {
+            Barbearia barbearia = barbeariaRepository.getReferenceById(id);
+
+            return new BarbeariaResponseDTO(barbearia);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BarbeariaResponseDTO> listar (Pageable pageable) {
+        Page<Barbearia> barbearia = barbeariaRepository.findAll(pageable);
+
+        return barbearia.map(BarbeariaResponseDTO::new);
     }
 }
