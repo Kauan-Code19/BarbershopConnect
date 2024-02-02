@@ -1,6 +1,5 @@
 package com.BarbershopConnect.BarbershopConnect.dto;
 
-import com.BarbershopConnect.BarbershopConnect.entities.Barbearia;
 import com.BarbershopConnect.BarbershopConnect.entities.Endereco;
 import jakarta.persistence.Embedded;
 import jakarta.validation.Valid;
