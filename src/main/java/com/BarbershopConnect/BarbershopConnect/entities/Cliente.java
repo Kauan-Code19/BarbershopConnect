@@ -3,6 +3,7 @@ package com.BarbershopConnect.BarbershopConnect.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -32,9 +33,6 @@ public class Cliente {
 
     @Column(name = "contato", nullable = false)
     private String contato;
-
-    @OneToMany(mappedBy = "cliente")
-    private Set<Avaliacao> avaliacoes;
 
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Agendamento agendamento;
