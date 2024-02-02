@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class BarbeariaDTO {
+public class ClienteDTO {
     private Long id;
 
     @Size(min = 3, max = 80, message = "O Campo precisa ter de 3 a 80 caracteres")
