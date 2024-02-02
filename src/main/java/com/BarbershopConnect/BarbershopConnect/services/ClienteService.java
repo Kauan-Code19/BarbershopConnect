@@ -9,6 +9,8 @@ import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFo
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +75,23 @@ public class ClienteService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public ClienteResponseDTO buscar(Long id) {
+        try {
+            Cliente cliente = clienteRepository.getReferenceById(id);
+
+            return new ClienteResponseDTO(cliente);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ClienteResponseDTO> listar(Pageable pageable) {
+        Page<Cliente> cliente = clienteRepository.findAll(pageable);
+
+        return cliente.map(ClienteResponseDTO::new);
     }
 }
