@@ -5,6 +5,8 @@ import com.BarbershopConnect.BarbershopConnect.dto.ClienteResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.entities.Cliente;
 import com.BarbershopConnect.BarbershopConnect.repositories.ClienteRepository;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
+import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,26 @@ public class ClienteService {
             return new ClienteResponseDTO(entity);
         }catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+  
+
+    @Transactional
+    public  ClienteResponseDTO atualizar (Long id, ClienteDTO clienteDTO) {
+        try {
+            Cliente entity = clienteRepository.getReferenceById(id);
+
+            entity.setNome(clienteDTO.getNome());
+            entity.setEmail(clienteDTO.getEmail());
+            entity.setSenha(clienteDTO.getSenha());
+            entity.setEndereco(clienteDTO.getEndereco());
+            entity.setContato(clienteDTO.getContato());
+
+            entity = clienteRepository.save(entity);
+
+            return new ClienteResponseDTO(entity);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
 }
