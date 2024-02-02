@@ -9,6 +9,8 @@ import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFo
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +39,8 @@ public class BarbeariaService {
             entity = barbeariaRepository.save(entity);
 
             return new BarbeariaResponseDTO(entity);
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Falha de integridade referencial");
+        }catch (DataIntegrityViolationException e) {
+                throw new DatabaseException("Falha de integridade referencial");
         }
     }
 
@@ -72,5 +74,23 @@ public class BarbeariaService {
         }catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public BarbeariaResponseDTO buscar (Long id) {
+        try {
+            Barbearia barbearia = barbeariaRepository.getReferenceById(id);
+
+            return new BarbeariaResponseDTO(barbearia);
+        }catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BarbeariaResponseDTO> listar (Pageable pageable) {
+        Page<Barbearia> barbearia = barbeariaRepository.findAll(pageable);
+
+        return barbearia.map(BarbeariaResponseDTO::new);
     }
 }
