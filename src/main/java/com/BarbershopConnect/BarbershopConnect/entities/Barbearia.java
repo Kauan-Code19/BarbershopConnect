@@ -51,7 +51,4 @@ public class Barbearia {
 
     @OneToMany(mappedBy = "barbearia")
     private Set<Agendamento> agendamentos = new HashSet<>();
-
-    @OneToMany(mappedBy = "barbearia")
-    private Set<Avaliacao> avaliacoes = new HashSet<>();
 }

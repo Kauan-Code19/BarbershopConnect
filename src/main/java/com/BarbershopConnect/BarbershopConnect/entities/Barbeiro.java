@@ -27,9 +27,6 @@ public class Barbeiro {
     @Column(name = "contato", nullable = false)
     private String contato;
 
-    @OneToMany(mappedBy = "barbeiro")
-    private Set<Avaliacao> avaliacoes = new HashSet<>();
-
     @ManyToOne
     @JoinColumn(name = "barbeariaId")
     private Barbearia barbearia;

@@ -34,9 +34,6 @@ public class Cliente {
     @Column(name = "contato", nullable = false)
     private String contato;
 
-    @OneToMany(mappedBy = "cliente")
-    private Set<Avaliacao> avaliacoes = new HashSet<>();
-
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Agendamento agendamento;
 }
