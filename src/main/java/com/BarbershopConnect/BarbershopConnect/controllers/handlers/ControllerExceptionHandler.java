@@ -2,6 +2,7 @@ package com.BarbershopConnect.BarbershopConnect.controllers.handlers;
 
 import com.BarbershopConnect.BarbershopConnect.dto.CustomError;
 import com.BarbershopConnect.BarbershopConnect.dto.ValidationError;
+import com.BarbershopConnect.BarbershopConnect.services.exceptions.AtualizacaoNaoProcessadaException;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.DatabaseException;
 import com.BarbershopConnect.BarbershopConnect.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +41,15 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<CustomError> databaseException(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AtualizacaoNaoProcessadaException.class)
+    public ResponseEntity<CustomError> agendamentoNaoAtualizavelException(AtualizacaoNaoProcessadaException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());

@@ -1,7 +1,10 @@
 package com.BarbershopConnect.BarbershopConnect.controllers;
 
+import com.BarbershopConnect.BarbershopConnect.dto.AgendamentoDTO;
+import com.BarbershopConnect.BarbershopConnect.dto.AgendamentoResponseDTO;
 import com.BarbershopConnect.BarbershopConnect.dto.ClienteDTO;
 import com.BarbershopConnect.BarbershopConnect.dto.ClienteResponseDTO;
+import com.BarbershopConnect.BarbershopConnect.services.AgendamentoService;
 import com.BarbershopConnect.BarbershopConnect.services.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private AgendamentoService agendamentoService;
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> cadastro(@Valid @RequestBody ClienteDTO clienteDTO) {
@@ -56,5 +61,29 @@ public class ClienteController {
         Page<ClienteResponseDTO> clienteResponseDTOS = clienteService.listar(pageable);
 
         return ResponseEntity.ok().body(clienteResponseDTOS);
+    }
+
+    @PostMapping("/{id}/agendamento")
+    public ResponseEntity<AgendamentoResponseDTO> agendar (@PathVariable Long id, @Valid @RequestBody AgendamentoDTO agendamentoDTO) {
+        AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.agendar(id, agendamentoDTO);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(agendamentoDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(agendamentoResponseDTO);
+    }
+
+    @PutMapping("/{id}/agendamento")
+    public ResponseEntity<AgendamentoResponseDTO> atualizarAgendamento (@PathVariable Long id, @Valid @RequestBody AgendamentoDTO agendamentoDTO) {
+        AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.atualizarAgendamento(id, agendamentoDTO);
+
+        return ResponseEntity.ok(agendamentoResponseDTO);
+    }
+
+    @GetMapping("/{id}/agendamento")
+    public ResponseEntity<AgendamentoResponseDTO> buscarAgendamento (@PathVariable Long id) {
+        AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.buscarAgendamento(id);
+
+        return ResponseEntity.ok().body(agendamentoResponseDTO);
     }
 }
