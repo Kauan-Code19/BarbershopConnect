@@ -31,6 +31,6 @@ public class ClienteDTO {
     @Embedded
     private Endereco endereco;
 
-    @Pattern(regexp = "^\\(?(\\d{2})\\)?[-.\\s]?\\d{4,5}[-.\\s]?\\d{4}$", message = "Formato de número de telefone inválido.")
+    @Pattern(regexp = "^\\+\\d{1,15}$", message = "Formato de número de telefone inválido.")
     private String contato;
 }
